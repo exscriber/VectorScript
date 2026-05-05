@@ -1,0 +1,21 @@
+[project]
+name = "VS-Playground"
+description = "VectorScript Playground: place to mess things up..."
+version = "1.0"
+license = "MIT"
+readme = "README.md"
+dependencies = [
+    "libcst",
+]
+
+[tool.black]
+line-length = 100
+preview = true
+skip-string-normalization = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+preview = true
+quote-style = "preserve"
