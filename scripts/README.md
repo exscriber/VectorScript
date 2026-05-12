@@ -5,6 +5,12 @@
 1. in VW create minimal stubs like:
     ```python
     import vs
+
+    try:
+        import debugpy # setup remote debug server
+        debugpy.listen(5678, in_process_debug_adapter=True)
+    except ImportError: pass
+
     import work # script name without .py
     work.run()  # def run():... script entry point
     ```
