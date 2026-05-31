@@ -22,6 +22,15 @@
     import inspect
     from pprint import pformat
 
+    def get_obj_info(obj: vs.Handle):
+        return {'h': obj, 'type': obj.type, 'aux': obj.aux.type, 'parent': obj.parent.type}
+
+    def vs_iter(container: vs.HandleContainer):
+        child = container.first
+        while child:
+            yield child
+            child = child.next
+
     def callback(obj: vs.Handle)
         # fill local variable with useful object types to inspect later
         obj_info = {'h': obj, 'type': obj.type, 'aux': obj.aux.type, 'parent': obj.parent.type}
@@ -44,4 +53,7 @@
     def run():
         vs.Message(f"{sys.version}\n")      # show VW host python version
         vs.ForEachObject(callback, "VSEL")  # iterate thru selected objects
+
+    if __name__ == "__main__":
+        run()  # fallback when script pasted directly
     ```
