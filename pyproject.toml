@@ -4,8 +4,11 @@ description = "VectorScript Playground: place to mess things up..."
 version = "1.0"
 license = "MIT"
 readme = "README.md"
+requires-python = ">=3.14"
 dependencies = [
     "libcst",
+    "numpy",
+    "scipy",
 ]
 
 [tool.black]
