@@ -15,7 +15,7 @@
 # This file must be used as help tool from the IDE so it can report information about the functions
 
 
-__version__ = "2026.05.11"
+__version__ = "2026.05.31"
 
 from enum import IntFlag
 from typing import Any, Callable
@@ -824,10 +824,10 @@ def AlertInform(
 
 
 def AlertInformDontShowAgain(
-		text: str,         # The information to be displayed.
-		advice: str,       # The text to be added in a smaller font under the main information message.
-		minorAlert: bool,  # The severity of the alert: minor(true) or major(false).
-		arrOptions: list,  # ARRAY [1..3] OF STRING; arrOpt[1] - Saved setting category to save checkbox value arrOpt[2] - Saved setting item to save checkbox value  arrOpt[3] - Specify a string to use in overriding the default 'Dont show this dialog again' checkbox string
+		text: str,          # The information to be displayed.
+		advice: str,        # The text to be added in a smaller font under the main information message.
+		minorAlert: bool,   # The severity of the alert: minor(true) or major(false).
+		arrOptions: tuple,  # ARRAY [1..3] OF STRING; arrOpt[1] - Saved setting category to save checkbox value arrOpt[2] - Saved setting item to save checkbox value  arrOpt[3] - Specify a string to use in overriding the default 'Dont show this dialog again' checkbox string
 		) -> None:
 	"""
 	Displays an alert dialog which provides the user with information about the result of a command with an option to not show the dialog again. It offers no user choices.  
@@ -872,7 +872,7 @@ def AlertInformHLinkN(
 		linkURL: str,           # The URL that a user will be directed to when the user clicks on the linkTitle text.
 		adviceAfterLink: str,   # The text to be added under the hyperlink. The text to be added will be in the same smaller font as the adviceBeforeLink text.
 		minorAlert: bool,       # The severity of the alert: minor(true) or major(false).
-		arrOptions: list,       # ARRAY [1..3] OF STRING; arrOpt[1] - Saved setting category to save checkbox value arrOpt[2] - Saved setting item to save checkbox value  arrOpt[3] - Specify a string to use in overriding the default 'Dont show this dialog again' checkbox string
+		arrOptions: tuple,      # ARRAY [1..3] OF STRING; arrOpt[1] - Saved setting category to save checkbox value arrOpt[2] - Saved setting item to save checkbox value  arrOpt[3] - Specify a string to use in overriding the default 'Dont show this dialog again' checkbox string
 		) -> None:
 	"""
 	Displays an alert dialog which provides the user with information about the result of a command with an option to not show the dialog again. It offers no user choices. It provides a hyperlink (HLink) to further help the user.  
@@ -925,7 +925,7 @@ def AlertQuestionDontShowAgain(
 		CancelOverrideText: str,  # Specifies a string to use in overriding the 'Cancel' string
 		customButtonAText: str,   # Specifies a string to use for an optional custom button A
 		customButtonBText: str,   # Specifies a string to use for a second optional custom button B
-		arrOptions: list,         # ARRAY [1..3] OF STRING;    arrOpt[1] - Saved setting category to save checkbox value    arrOpt[2] - Saved setting item to save checkbox value     arrOpt[3] - Specify a string to use in overriding the default 'Always do the selection action' checkbox string
+		arrOptions: tuple,        # ARRAY [1..3] OF STRING;    arrOpt[1] - Saved setting category to save checkbox value    arrOpt[2] - Saved setting item to save checkbox value     arrOpt[3] - Specify a string to use in overriding the default 'Always do the selection action' checkbox string
 		) -> int:
 	"""
 	Displays an alert dialog which alerts the user to a condition or situation that requires the user's decision and input before preceding; such as an impending action with potentially destructive or irreversible consequences with the option to always do the selected action and not show the dialog again. The message should be in the form of a question.  
@@ -2665,16 +2665,14 @@ def Command() -> bool:
 
 
 def Comp(
-		v1: Vector3,  # Comparison vector 1.
+		v1: Vector3,  # Comparison vector 1
 		v2: Vector3,  # Comparison vector 2
-		v3: Vector3,  # Component of vector 1 along vector 2
-		v4: Vector3,  # Component of vector 1 orthogonal to vector 2.
 		) -> tuple[Vector3, Vector3]:
 	"""
 	Returns the components of a comparison of two vectors.  
 	The vector component of v1 along v2 in v3, and the vector component of v1 orthogonal to v2 in v4.
 
-	Python: (v3, v4) = vs.Comp(v1, v2, v3, v4)
+	Python: (v3, v4) = vs.Comp(v1, v2)
 
 	Category: Math - Vectors
 	"""
@@ -10283,7 +10281,7 @@ def GetArc(
 
 
 def GetArrayDimensions(
-		arrayname: list,  # Name of array.
+		arrayname: tuple,  # Name of array.
 		) -> tuple[int, int, int, int]:
 	"""
 	Returns the dimensions of the specified array.
@@ -15821,7 +15819,7 @@ def GetObjectHiddenLine(
 
 def GetObjectTags(
 		objHandle: Handle,  # The handle to the object to query Tags from.
-		) -> tuple[bool, list]:
+		) -> tuple[bool, tuple]:
 	"""
 	Lets the user query the list of Tags set on an object such as a Class,Layer or Resource.
 
@@ -16983,7 +16981,7 @@ def GetProjectUser(
 
 
 def GetProjectUserNames(
-		) -> tuple[bool, list]:
+		) -> tuple[bool, tuple]:
 	"""
 	Get a list of userids that are part of the current project.
 
@@ -17156,7 +17154,7 @@ def GetResourceString(
 
 def GetResourceTags(
 		handle: Handle,  # The handle to the resource.
-		) -> list:
+		) -> tuple:
 	"""
 	Gets the tags attached to the specified resource.
 
@@ -17711,7 +17709,7 @@ def GetStoryBelow(
 def GetStoryBoundChoiceStrings(
 		story: Handle,   # The story relative to which to get the strings. Nil gets a generic list of strings.
 		topBound: bool,  # Whether to get the strings for a top bound or a bottom bound.
-		) -> list:
+		) -> tuple:
 	"""
 	Gets the choice strings for a story bound control.
 
@@ -17742,7 +17740,7 @@ def GetStoryBoundDataFromChoiceString(
 def GetStoryChoiceStrsN(
 		story: Handle,        # The story relative to which to get the strings. Nil gets a generic list of strings.
 		boundSelection: int,  # Type of bounds strings being requested: 0 for Top Bound; 1 for Dual Bound (combines both top and bottom); 2 for Bottom Bound.
-		) -> list:
+		) -> tuple:
 	"""
 	Gets story bound strings to supply to the bound popup. Can request strings for top bound, bottom bound, or dual (both) bounds.
 
@@ -28507,7 +28505,7 @@ def PopAttrs() -> None:
 
 	Python: vs.PopAttrs()
 
-	See also: :func:`PushAttrs;`
+	See also: :func:`PushAttrs`
 
 	Category: Command
 	"""
@@ -28517,7 +28515,7 @@ def PopAttrs() -> None:
 def PopupGetChoices(
 		recName: str,    # Name of record in which field is.
 		fieldName: str,  # Name of field.
-		) -> tuple[int, list]:
+		) -> tuple[int, tuple]:
 	"""
 	Python: (outNumValues, outPopUpValues) = vs.PopupGetChoices(recName, fieldName)
 
@@ -28527,9 +28525,9 @@ def PopupGetChoices(
 
 
 def PopupSetChoices(
-		recName: str,       # Name of record to which field will be added.
-		fieldName: str,     # Name of field.
-		popUpValues: list,  # Enter popup values.
+		recName: str,        # Name of record to which field will be added.
+		fieldName: str,      # Name of field.
+		popUpValues: tuple,  # Enter popup values.
 		) -> None:
 	"""
 	Python: vs.PopupSetChoices(recName, fieldName, popUpValues)
@@ -36009,7 +36007,7 @@ def SetLinkHeightToLayerDeltaZ(
 def SetListBoxTabStops(
 		dialogID: int,     # 
 		componentID: int,  # 
-		tabStops: list,    # 
+		tabStops: tuple,   # 
 		) -> None:
 	"""
 	Set tab stops for list control.
@@ -36531,7 +36529,7 @@ def SetObjectStoryBound(
 
 def SetObjectTags(
 		objectHandle: Handle,  # The object to set Tags on.
-		arrTags: list,         # The arra of Tag Strings.
+		arrTags: tuple,        # The arra of Tag Strings.
 		) -> bool:
 	"""
 	Lets the user set a list of Tags on an object such as a Class,Layer or Resource.
@@ -37402,7 +37400,7 @@ def SetRecord(
 
 def SetResourceTags(
 		handle: Handle,  # The handle to the resource.
-		tags: list,      # The list of tags.
+		tags: tuple,     # The list of tags.
 		) -> None:
 	"""
 	Adds the specified tags to the specified resource.
@@ -41519,7 +41517,7 @@ def Smooth(
 def SortArray(
 		numtosort: int,    # 
 		fieldnumber: int,  # 
-		) -> list:
+		) -> tuple:
 	"""
 	Sorts a 1-dimension array into ascending order. If the array contains handles to records, the array can be sorted by the specified field number index. If the array is an array of structures, the fieldnumber argument denotes the element in the structure on which to sort.
 

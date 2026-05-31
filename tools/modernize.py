@@ -39,7 +39,7 @@ class cfg:
     # VS -> Python types translation table
     Types = {
         'ANY': 'Any',
-        'ARRAY': 'list',
+        'ARRAY': 'tuple',
         # Pointers
         'HANDLE': 'Handle',
         'PROCEDURE': 'Callable',
@@ -70,16 +70,20 @@ class cfg:
         'orgin': 'origin',
         'ro': 'row',
     }
+    # HACK: delete function args
+    DeleteArgs = {
+        'Comp': ['v3', 'v4'],
+    }
 
     # HACK: fix function args
     FixArgTypes = {
-        'Poly': 'Point2',
-        'Poly3D': 'Point3',
+        'Poly': {'p': 'Point2'},
+        'Poly3D': {'p': 'Point3'},
     }
 
     # HACK: treat functions as variadic (*args)
     # TODO: fill list with parser instead of hardcoding
-    VarArgFuncs = [
+    StarArgs = [
         'Concat',
         'Message',
         'Poly',
@@ -187,6 +191,11 @@ class ParamWalker(cst.CSTTransformer):
         self.py_type = None
         self.vs_type = None
 
+        # HACK: Delete arg and skip over
+        if self.name in cfg.DeleteArgs.get(self.func_name, []):
+            self.name = None
+            return False
+
     def visit_Comment(self, node):
         if match := re.match(r"# (?:in/out )?(?P<type>.+?)\s*- (?P<desc>.*)", node.value):
             self.desc = match['desc'].strip()
@@ -206,6 +215,9 @@ class ParamWalker(cst.CSTTransformer):
         return updated_node.with_changes(whitespace=cst.SimpleWhitespace(ws))
 
     def leave_Param(self, original_node, updated_node):
+        if self.name is None:
+            return cst.RemoveFromParent()
+
         changes: dict[str, cst.CSTNode] = {}
 
         # trailing comma changes: remove spaces before comma and make it mandatory
@@ -227,9 +239,10 @@ class ParamWalker(cst.CSTTransformer):
             changes['annotation'] = cst.Annotation(cst.parse_expression(hint))
 
         # HACK: Poly, Poly3D arg types wrong - fix them here
-        if fix_hint := cfg.FixArgTypes.get(self.func_name):
-            self.py_type = fix_hint
-            changes['annotation'] = cst.Annotation(cst.Name(fix_hint))
+        if fix_func := cfg.FixArgTypes.get(self.func_name):
+            if fix_type := fix_func.get(self.name):
+                self.py_type = fix_type
+                changes['annotation'] = cst.Annotation(cst.Name(fix_type))
 
         self.arg_list.append(self.Param(self.name, self.desc, self.py_type, self.vs_type))
         return updated_node.with_changes(**changes)
@@ -252,7 +265,7 @@ class ParamWalker(cst.CSTTransformer):
             changes['params'] = new_params
 
         # HACK: Variadic functions: change arg into *arg...
-        if self.func_name in cfg.VarArgFuncs:
+        if self.func_name in cfg.StarArgs:
             changes['params'] = []
             changes['star_arg'] = updated_node.params[0].with_changes(star='*')
 

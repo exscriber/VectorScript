@@ -15,7 +15,7 @@ So we gather relevant pieces from several different places:
 1. **Return** types from `vs.py` pascal docstring: `VectorScript: FUNCTION Abs(v:REAL) : REAL;`
 1. **See-also** links and **Deprecated** status from `VectorScript Reference.xml`
 
-### Inconsistancy
+### Inconsistancy hacks
 There is some hacks to work around data inconsistancy:
 1. Class method types hardcoded: seems there is no data to derive from...
 1. Funcs with extra phantom return in **Python** docstrings: corrected from **VectorScript** counterparts...  
@@ -24,5 +24,7 @@ There is some hacks to work around data inconsistancy:
     `Concat, Message, Poly, Poly3D, Write, WriteBin, WriteLn, WriteLnMac, WriteMac`  
     `GS_EdSh_ConstructLayout`: not marked because it has 3 variadic args - not possible in python
 1. Funcs with wrong arg types:  
-    `Poly`: must be `POINT` instead of `REAL`  
-    `Poly3D`: must be `POINT3D` instead of `REAL`
+    `Poly`: arg `p` must be `POINT` instead of `REAL`  
+    `Poly3D`: arg `p` must be `POINT3D` instead of `REAL`
+1. Funcs with wrong arg count:  
+    `Comp`: must be `v3,v4 = Comp(v1,v2)` instead of `v3,v4 = Comp(v1,v2,v3,v4)`

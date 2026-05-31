@@ -165,7 +165,7 @@ def parse_xml_file(file: str) -> list[XmlFunc]:
             func.deprecated = Deprecated(int(elem.text), elem.get('Mode'))
 
         if (text := item.findtext('SeeAlso')) is not None:
-            func.see_also = [n.strip() for n in text.split(',')]
+            func.see_also = [n.strip().strip(';') for n in text.split(',')]
 
         func_list.append(func)
     return func_list
