@@ -55,6 +55,12 @@
                 fld_name: vs.GetRField(obj, rec.name, fld_name)
                 for fld_name in (vs.GetFldName(rec, j) for j in range(1, vs.NumFields(rec) + 1))
             }
+        
+        # container object types: Group(11), SymDef(16), Layer(31), PIO(86)
+        if obj.type in (11, 16, 31, 86):
+            # recursive walk thru object tree
+            for child in vs_iter(obj):
+                callback(child)
 
         # stop script execution and show local variables (like obj_info, records, ...)
         vs.AlrtDialog(f"{pformat(inspect.currentframe().f_locals, sort_dicts=False)}")
