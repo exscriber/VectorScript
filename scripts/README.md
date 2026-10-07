@@ -2,6 +2,15 @@
 
 1. Add this folder to VW: Tools / Plug-ins / Script Options / Enviroment Path
 
+1. Install Python modules with `Marionette` / `uv`:
+    ```sh
+    #!/bin/zsh
+
+    PY_MODULES=(numpy scipy geopy shapely debugpy)
+    VW_PYTHON_PATH="$HOME/Library/Application Support/Vectorworks/2025/Python Externals"
+    uv pip install $PY_MODULES --target $VW_PYTHON_PATH --python 3.9
+    ```
+
 1. in VW create minimal stubs like:
     ```python
     import vs
